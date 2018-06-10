@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0619269E-4789-4821-AAE8-BE3DB888485E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VkApi</RootNamespace>
+    <AssemblyName>VkApi</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
+    <DocumentationFile>bin\Debug\VkApi.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
+    <DocumentationFile>bin\Release\VkApi.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exeptions\CaptchaNeededExeption.cs" />
+    <Compile Include="Exeptions\AccountExeptions.cs" />
+    <Compile Include="Exeptions\InvalidClientExeption.cs" />
+    <Compile Include="Exeptions\ValidationNeededExeption.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Methods\Ads.cs" />
+    <Compile Include="Methods\Apps.cs" />
+    <Compile Include="Methods\AppWidgets.cs" />
+    <Compile Include="Methods\Audio.cs" />
+    <Compile Include="Methods\Auth.cs" />
+    <Compile Include="Methods\Board.cs" />
+    <Compile Include="Methods\Database.cs" />
+    <Compile Include="Methods\Docs.cs" />
+    <Compile Include="Methods\Fave.cs" />
+    <Compile Include="Methods\Friends.cs" />
+    <Compile Include="Methods\Gifts.cs" />
+    <Compile Include="Methods\Groups.cs" />
+    <Compile Include="Methods\Likes.cs" />
+    <Compile Include="Methods\Market.cs" />
+    <Compile Include="Methods\Messages.cs" />
+    <Compile Include="Methods\Newsfeed.cs" />
+    <Compile Include="Methods\Notes.cs" />
+    <Compile Include="Methods\Notifications.cs" />
+    <Compile Include="Methods\Other.cs" />
+    <Compile Include="Methods\Pages.cs" />
+    <Compile Include="Methods\Photos.cs" />
+    <Compile Include="Methods\Places.cs" />
+    <Compile Include="Methods\Polls.cs" />
+    <Compile Include="Methods\Search.cs" />
+    <Compile Include="Methods\Stats.cs" />
+    <Compile Include="Methods\Status.cs" />
+    <Compile Include="Methods\Storage.cs" />
+    <Compile Include="Methods\Stories.cs" />
+    <Compile Include="Methods\Streaming.cs" />
+    <Compile Include="Methods\Users.cs" />
+    <Compile Include="Methods\Utils.cs" />
+    <Compile Include="Methods\Video.cs" />
+    <Compile Include="Methods\Wall.cs" />
+    <Compile Include="Methods\Widgets.cs" />
+    <Compile Include="Models\dAccount.cs" />
+    <Compile Include="Models\dApiError.cs" />
+    <Compile Include="Methods\Account.cs" />
+    <Compile Include="Models\dAudio.cs" />
+    <Compile Include="Models\dAuth.cs" />
+    <Compile Include="Models\dAuthError.cs" />
+    <Compile Include="Models\dAuthSuccess.cs" />
+    <Compile Include="Models\dUsers.cs" />
+    <Compile Include="Net.cs" />
+    <Compile Include="Vk.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
