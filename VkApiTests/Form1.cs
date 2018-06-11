@@ -25,7 +25,7 @@ namespace VkApiTests
         private const string __login = "";
         private const string __password = "";
 
-        Vk VK = new Vk(__login, __password, Auth.Scope.all);
+        Vk VK = new Vk(__login, __password, Scope.all);
 
         private async void button1_Click(object sender, EventArgs e)
         {
@@ -33,12 +33,14 @@ namespace VkApiTests
             var response = await Net.Request<dAudio.Get>("audio.get", access_token: VK.getToken());
 
             if (response.error is null)
-                Console.WriteLine("null");
+                Console.WriteLine("Audio count: " + response.response.count);
+            else
+                Console.WriteLine(response.error.error_msg);
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-
+            VK = new Vk(await VK.Auth.refreshToken());
         }
     }
 }

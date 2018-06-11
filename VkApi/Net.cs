@@ -96,7 +96,7 @@ namespace VkApi
         /// <param name="captcha_key">Ввод пользователя</param>
         /// <param name="captcha_sid">captcha_sid который вернул сервер</param>
         /// <returns></returns>
-        public static async Task<object> getToken(string login, string password, Auth.Scope scope = Auth.Scope.all, string captcha_key = null, string captcha_sid = null)
+        public static async Task<object> getToken(string login, string password, Scope scope = Scope.all, string captcha_key = null, string captcha_sid = null)
         {
             try
             {

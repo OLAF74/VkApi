@@ -28,7 +28,7 @@ namespace VkApi
         /// <param name="login">E-mail или номер телефона</param>
         /// <param name="password">Пароль</param>
         /// <param name="scope">Разрешения для приложения</param>
-        public Vk(string login, string password, Auth.Scope scope = Auth.Scope.all)
+        public Vk(string login, string password, Scope scope = Scope.all)
         {
             var Task = Net.getToken(login, password, scope);
             Task.Wait();
@@ -56,7 +56,6 @@ namespace VkApi
             }
         }
 
-
         /// <summary>
         /// Инициализирует библиотеку с помощью логина и пароля
         /// Используется, если нужно подтвердить каптчу
@@ -66,7 +65,7 @@ namespace VkApi
         /// <param name="scope">Разрешения для приложения</param>
         /// <param name="captcha_key">Текст, который ввел пользователь</param>
         /// <param name="captcha_sid">Полученный идентификатор</param>
-        public Vk(string login, string password, string captcha_key, string captcha_sid, Auth.Scope scope = Auth.Scope.all)
+        public Vk(string login, string password, string captcha_key, string captcha_sid, Scope scope = Scope.all)
         {
             var Task = Net.getToken(login, password, scope, captcha_key, captcha_sid);
             Task.Wait();
@@ -94,7 +93,6 @@ namespace VkApi
             }
         }
 
-
         /// <summary>
         /// Инициализирует библиотеку с помощью access_token
         /// </summary>
@@ -104,7 +102,6 @@ namespace VkApi
             this.access_token = access_token;
             Initialization();
         }
-
 
         private void Initialization()
         {
@@ -145,7 +142,6 @@ namespace VkApi
             Widgets = new Widgets(this);
         }
 
-
         /// <summary>
         /// Возвращает access_token
         /// </summary>
@@ -155,7 +151,6 @@ namespace VkApi
             return access_token;
         }
 
-
         /// <summary>
         /// Возвращает user_id
         /// </summary>
@@ -164,7 +159,6 @@ namespace VkApi
         {
             return user_id;
         }
-
 
         /// <summary>
         /// Возвращает expires_in
@@ -349,6 +343,5 @@ namespace VkApi
         /// Методы для работы с виджетами на внешних сайтах.
         /// </summary>
         public Widgets Widgets { get; private set; }
-
     }
 }
