@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using VkApi;
 using VkApi.Methods;
 using VkApi.Models;
-using VkApi.Extensions;
 
 namespace VkApiTests
 {
@@ -30,17 +29,22 @@ namespace VkApiTests
         private async void button1_Click(object sender, EventArgs e)
         {
 
-            var response = await Net.Request<dAudio.Get>("audio.get", access_token: VK.getToken());
+
+            var response = await Net.Request<dAudio.Get>("audio.get");
 
             if (response.error is null)
                 Console.WriteLine("Audio count: " + response.response.count);
             else
                 Console.WriteLine(response.error.error_msg);
+
+
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
             VK = new Vk(await VK.Auth.refreshToken());
         }
+
+
     }
 }

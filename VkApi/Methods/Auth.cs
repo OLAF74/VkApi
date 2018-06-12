@@ -13,10 +13,6 @@ namespace VkApi.Methods
     /// </summary>
     public class Auth
     {
-        private readonly string access_token;
-        private readonly int user_id;
-        private readonly int expires_in;
-
         /// <summary>
         /// Строка ответа от google, нужна для работы метода Auth.refreshToken().
         /// <para>Если при использовании Auth.refreshToken() у вас не работают методы закрытого api, то скорее всего нужно заменить эту строку на новую.</para>
@@ -47,15 +43,6 @@ namespace VkApi.Methods
 
 
 
-        public Auth(Vk vk)
-        {
-            access_token = vk.getToken();
-            user_id = vk.getUID();
-            expires_in = vk.getTokenExpires();
-        }
-
-
-
         /// <summary>
         /// Обход ограничений на закрытое API
         /// </summary>
@@ -79,7 +66,7 @@ namespace VkApi.Methods
                 {
                     ["v"] = Net.API_VERSION,
                     ["receipt"] = receipt,
-                    ["access_token"] = access_token
+                    ["access_token"] = Data.access_token
                 };
 
                 web.Headers.Add("User-Agent", Net.USER_AGENT);

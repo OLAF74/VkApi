@@ -30,5 +30,15 @@ namespace VkApi.Models
             public dApiError.Error error { get; set; }
         }
 
+        public class ChangePassword
+        {
+            public Response response { get; set; }
+
+            public class Response
+            {
+                public string token { get; set; }
+            }
+        }
+
     }
 }

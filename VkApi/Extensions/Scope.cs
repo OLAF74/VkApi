@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VkApi
 {
@@ -120,4 +117,22 @@ namespace VkApi
         /// </summary>
         market = 134217728
     }
+
+
+    public static class EnumExtensions
+    {
+        /// <summary>
+        /// Возвращает флаги досутпа приложения из битовой маски. Пример использования: ((Scope)3).GetFlags()
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static IEnumerable<Enum> GetFlags(this Enum input)
+        {
+            foreach (Enum value in Enum.GetValues(input.GetType()))
+                if (input.HasFlag(value))
+                    yield return value;
+        }
+    }
+
+   
 }

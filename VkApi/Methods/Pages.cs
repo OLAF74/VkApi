@@ -8,15 +8,6 @@ namespace VkApi.Methods
 {
     public class Pages
     {
-        private readonly string access_token;
-        private readonly int user_id;
-        private readonly int expires_in;
 
-        public Pages(Vk vk)
-        {
-            access_token = vk.getToken();
-            user_id = vk.getUID();
-            expires_in = vk.getTokenExpires();
-        }
     }
 }

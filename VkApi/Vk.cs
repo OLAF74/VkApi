@@ -18,10 +18,6 @@ namespace VkApi
     /// </summary>
     public class Vk
     {
-        private readonly string access_token;
-        private readonly int user_id;
-        private readonly int expires_in;
-
         /// <summary>
         /// Инициализирует библиотеку с помощью логина и пароля
         /// </summary>
@@ -48,9 +44,7 @@ namespace VkApi
                     }
                     break;
                 case dAuthSuccess suc:
-                    access_token = suc.access_token;
-                    user_id = suc.user_id;
-                    expires_in = suc.expires_in;
+                    Data.Set(suc.access_token, suc.user_id, suc.expires_in);
                     Initialization();
                     break;
             }
@@ -85,9 +79,7 @@ namespace VkApi
                     }
                     break;
                 case dAuthSuccess suc:
-                    access_token = suc.access_token;
-                    user_id = suc.user_id;
-                    expires_in = suc.expires_in;
+                    Data.Set(suc.access_token, suc.user_id, suc.expires_in);
                     Initialization();
                     break;
             }
@@ -99,74 +91,47 @@ namespace VkApi
         /// <param name="access_token"></param>
         public Vk(string access_token)
         {
-            this.access_token = access_token;
+            Data.Set(access_token, 0, 0);
             Initialization();
         }
 
         private void Initialization()
         {
-            Account = new Account(this);
-            Ads = new Ads(this);
-            Apps = new Apps(this);
-            AppWidgets = new AppWidgets(this);
-            Audio = new Audio(this);
-            Auth = new Auth(this);
-            Board = new Board(this);
-            Database = new Database(this);
-            Docs = new Docs(this);
-            Fave = new Fave(this);
-            Friends = new Friends(this);
-            Gifts = new Gifts(this);
-            Groups = new Groups(this);
-            Likes = new Likes(this);
-            Market = new Market(this);
-            Messages = new Messages(this);
-            Newsfeed = new Newsfeed(this);
-            Notes = new Notes(this);
-            Notifications = new Notifications(this);
-            Other = new Other(this);
-            Pages = new Pages(this);
-            Photos = new Photos(this);
-            Places = new Places(this);
-            Polls = new Polls(this);
-            Search = new Search(this);
-            Stats = new Stats(this);
-            Status = new Status(this);
-            Storage = new Storage(this);
-            Stories = new Stories(this);
-            Streaming = new Streaming(this);
-            Users = new Users(this);
-            Utils = new Utils(this);
-            Video = new Video(this);
-            Wall = new Wall(this);
-            Widgets = new Widgets(this);
-        }
-
-        /// <summary>
-        /// Возвращает access_token
-        /// </summary>
-        /// <returns></returns>
-        public string getToken()
-        {
-            return access_token;
-        }
-
-        /// <summary>
-        /// Возвращает user_id
-        /// </summary>
-        /// <returns></returns>
-        public int getUID()
-        {
-            return user_id;
-        }
-
-        /// <summary>
-        /// Возвращает expires_in
-        /// </summary>
-        /// <returns></returns>
-        public int getTokenExpires()
-        {
-            return expires_in;
+            Account = new Account();
+            Ads = new Ads();
+            Apps = new Apps();
+            AppWidgets = new AppWidgets();
+            Audio = new Audio();
+            Auth = new Auth();
+            Board = new Board();
+            Database = new Database();
+            Docs = new Docs();
+            Fave = new Fave();
+            Friends = new Friends();
+            Gifts = new Gifts();
+            Groups = new Groups();
+            Likes = new Likes();
+            Market = new Market();
+            Messages = new Messages();
+            Newsfeed = new Newsfeed();
+            Notes = new Notes();
+            Notifications = new Notifications();
+            Other = new Other();
+            Pages = new Pages();
+            Photos = new Photos();
+            Places = new Places();
+            Polls = new Polls();
+            Search = new Search();
+            Stats = new Stats();
+            Status = new Status();
+            Storage = new Storage();
+            Stories = new Stories();
+            Streaming = new Streaming();
+            Users = new Users();
+            Utils = new Utils();
+            Video = new Video();
+            Wall = new Wall();
+            Widgets = new Widgets();
         }
 
         /// <summary>

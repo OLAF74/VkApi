@@ -10,18 +10,6 @@ namespace VkApi.Methods
 {
     public class Account
     {
-        private readonly string access_token;
-        private readonly int user_id;
-        private readonly int expires_in;
-
-        public Account(Vk vk)
-        {
-            access_token = vk.getToken();
-            user_id = vk.getUID();
-            expires_in = vk.getTokenExpires();
-        }
-
-
         /// <summary>
         /// Добавляет пользователя или группу в черный список.
         /// </summary>
@@ -32,9 +20,9 @@ namespace VkApi.Methods
             var response = await Net.Request<dAccount.Ban>("account.ban", new System.Collections.Specialized.NameValueCollection
             {
                 ["owner_id"] = owner_id.ToString()
-            }, access_token);
+            });
 
-            if (response.error.error_code != 0)//response.error.error_code == 15 | response.error.error_code == 100
+            if (response.error != null)
                 switch (response.error.error_code)
                 {
                     case 15:
@@ -57,9 +45,9 @@ namespace VkApi.Methods
             var response = await Net.Request<dAccount.Unban>("account.unban", new System.Collections.Specialized.NameValueCollection
             {
                 ["owner_id"] = owner_id.ToString()
-            }, access_token);
+            });
 
-            if (response.error.error_code != 0)
+            if (response.error != null)
                 switch (response.error.error_code)
                 {
                     case 15:
@@ -80,7 +68,7 @@ namespace VkApi.Methods
         /// <returns>После успешного выполнения возвращает true.</returns>
         public async Task<bool> SetOffline()
         {
-            var response = await Net.Request<dAccount.SetOffline>("account.setOffline", access_token: access_token);
+            var response = await Net.Request<dAccount.SetOffline>("account.setOffline");
 
             return Convert.ToBoolean(response.response);
         }
@@ -91,11 +79,31 @@ namespace VkApi.Methods
         /// <returns>После успешного выполнения возвращает true.</returns>
         public async Task<bool> SetOnline()
         {
-            var response = await Net.Request<dAccount.SetOnline>("account.setOnline", access_token: access_token);
+            var response = await Net.Request<dAccount.SetOnline>("account.setOnline");
 
             return Convert.ToBoolean(response.response);
         }
 
+        /// <summary>
+        /// Позволяет сменить пароль пользователя после успешного восстановления доступа к аккаунту через СМС, используя метод Auth.Restore.
+        /// </summary>
+        /// <param name="restore_sid">Идентификатор сессии, полученный при восстановлении доступа используя метод auth.restore. (В случае если пароль меняется сразу после восстановления доступа)</param>
+        /// <param name="change_password_hash">Хэш, полученный при успешной OAuth авторизации по коду полученному по СМС (В случае если пароль меняется сразу после восстановления доступа)</param>
+        /// <param name="old_password">Текущий пароль пользователя.</param>
+        /// <param name="new_password">Новый пароль, который будет установлен в качестве текущего. </param>
+        /// <returns></returns>
+        public async Task<dAccount.ChangePassword> ChangePassword(string restore_sid, string change_password_hash, string old_password, string new_password)
+        {
+            var response = await Net.Request<dAccount.ChangePassword>("account.changePassword", new System.Collections.Specialized.NameValueCollection
+            {
+                ["restore_sid"] = restore_sid,
+                ["change_password_hash"] = change_password_hash,
+                ["old_password"] = old_password,
+                ["new_password"] = new_password
+            });
 
+
+            return null;
+        }
     }
 }

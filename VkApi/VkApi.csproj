@@ -53,8 +53,8 @@
     <Compile Include="Exeptions\AccountExeptions.cs" />
     <Compile Include="Exeptions\InvalidClientExeption.cs" />
     <Compile Include="Exeptions\ValidationNeededExeption.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\Scope.cs" />
+    <Compile Include="Extensions\Data.cs" />
     <Compile Include="Methods\Ads.cs" />
     <Compile Include="Methods\Apps.cs" />
     <Compile Include="Methods\AppWidgets.cs" />

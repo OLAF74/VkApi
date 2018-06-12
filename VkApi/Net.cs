@@ -28,13 +28,11 @@ namespace VkApi
         /// </summary>
         public const string CLIENT_ID = "2274003";
 
-
         /// <summary>
         /// Secret вашего приложения. 
         /// Сечас стоит secret оффициального приложения Вк для Android
         /// </summary>
         public const string CLIENT_SECRET = "hHbZxrka2uZ6jB1inYsH";
-
 
         /// <summary>
         /// User-Agent необходимый для правильной работы обхода закрытого API
@@ -48,9 +46,8 @@ namespace VkApi
         /// <typeparam name="T">Класс, в который будет десереализирован ответ</typeparam>
         /// <param name="method">Название метода, к которому следует обратится</param>
         /// <param name="parameters">Коллекция параметров для запроса</param>
-        /// <param name="access_token">Ваш access_token, если необходимо</param>
         /// <returns></returns>
-        public static async Task<T> Request<T>(string method, NameValueCollection parameters = null, string access_token = null) where T : class
+        public static async Task<T> Request<T>(string method, NameValueCollection parameters = null) where T : class
         {
             using (WebClient web = new WebClient())
             {
@@ -58,9 +55,8 @@ namespace VkApi
                 {
                     if (parameters is null)
                         parameters = new NameValueCollection();
-                    if (access_token != null)
-                        parameters["access_token"] = access_token;
 
+                    parameters["access_token"] = Data.access_token;
                     parameters["v"] = API_VERSION;
                     parameters["lang"] = Thread.CurrentThread.CurrentUICulture.ToString();
 
@@ -85,6 +81,49 @@ namespace VkApi
             }
 
         }
+
+
+        /// <summary>
+        /// Метод осуществляет запросы к серверу Вк. Debug only. Возвращает строку ответа для дальнейшего создания класса объекта.
+        /// </summary>
+        /// <param name="method">Название метода, к которому следует обратится</param>
+        /// <param name="parameters">Коллекция параметров для запроса</param>
+        /// <returns></returns>
+        public static async Task<string> Request(string method, NameValueCollection parameters = null)
+        {
+            using (WebClient web = new WebClient())
+            {
+                try
+                {
+                    if (parameters is null)
+                        parameters = new NameValueCollection();
+
+                    parameters["access_token"] = Data.access_token;
+                    parameters["v"] = API_VERSION;
+                    parameters["lang"] = Thread.CurrentThread.CurrentUICulture.ToString();
+
+                    web.Headers.Add("User-Agent", USER_AGENT);
+                    string response = Encoding.UTF8.GetString(await web.UploadValuesTaskAsync($"https://api.vk.com/method/{method}", parameters));
+
+
+                    //Console.WriteLine(response);
+
+
+                    return response;
+                }
+                catch (WebException ex)
+                {
+                    using (Stream stream = ((HttpWebResponse)ex.Response).GetResponseStream())
+                    {
+                        string response = new StreamReader(stream, Encoding.UTF8).ReadToEnd();
+                        return response;
+                    }
+
+                }
+            }
+
+        }
+
 
 
         /// <summary>
