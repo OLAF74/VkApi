@@ -28,6 +28,7 @@ namespace VkApiTests
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            VK = new Vk(await VK.Auth.refreshToken());
 
 
             var response = await Net.Request<dAudio.Get>("audio.get");
@@ -36,13 +37,12 @@ namespace VkApiTests
                 Console.WriteLine("Audio count: " + response.response.count);
             else
                 Console.WriteLine(response.error.error_msg);
-
-
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            VK = new Vk(await VK.Auth.refreshToken());
+            var response = await VK.Status.Set("memento mori");
+            Console.WriteLine(response);
         }
 
 
