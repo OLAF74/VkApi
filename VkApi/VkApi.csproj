@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Exeptions\CaptchaNeededExeption.cs" />
     <Compile Include="Exeptions\AccountExeptions.cs" />
-    <Compile Include="Exeptions\CommonExeption.cs" />
+    <Compile Include="Exeptions\CommonExeptions.cs" />
     <Compile Include="Exeptions\InvalidClientExeption.cs" />
     <Compile Include="Exeptions\StatusExeptions.cs" />
     <Compile Include="Exeptions\ValidationNeededExeption.cs" />

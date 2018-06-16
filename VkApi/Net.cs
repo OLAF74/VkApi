@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using VkApi.Models;
 using System;
-using VkApi.Methods;
+using VkApi.Exeptions;
 
 namespace VkApi
 {
@@ -49,6 +49,8 @@ namespace VkApi
         /// <returns></returns>
         public static async Task<T> Request<T>(string method, NameValueCollection parameters = null) where T : class
         {
+            string response = string.Empty;
+
             using (WebClient web = new WebClient())
             {
                 try
@@ -61,34 +63,104 @@ namespace VkApi
                     parameters["lang"] = Thread.CurrentThread.CurrentUICulture.ToString();
 
                     web.Headers.Add("User-Agent", USER_AGENT);
-                    string response = Encoding.UTF8.GetString(await web.UploadValuesTaskAsync($"https://api.vk.com/method/{method}", parameters));
 
-
-                    //Console.WriteLine(response);
-
-
-                    return JsonConvert.DeserializeObject<T>(response);
+                    response = Encoding.UTF8.GetString(await web.UploadValuesTaskAsync($"https://api.vk.com/method/{method}", parameters));
                 }
                 catch (WebException ex)
                 {
                     using (Stream stream = ((HttpWebResponse)ex.Response).GetResponseStream())
-                    {
-                        string response = new StreamReader(stream, Encoding.UTF8).ReadToEnd();
-                        return JsonConvert.DeserializeObject<T>(response);
-                    }
-
+                        response = new StreamReader(stream, Encoding.UTF8).ReadToEnd();
                 }
             }
 
+            dynamic responseClass = JsonConvert.DeserializeObject<T>(response);
+
+            if (responseClass.error != null)
+            {
+                switch (responseClass.error.error_code)
+                {
+                    case 1:
+                        throw new CommonExeptions.UnknownApiExeption();
+                    case 2:
+                        throw new CommonExeptions.AppDisabled();
+                    case 3:
+                        throw new CommonExeptions.UnknownMethod();
+                    case 4:
+                        throw new CommonExeptions.WrongSignature();
+                    case 5:
+                        throw new CommonExeptions.AuthError();
+                    case 6:
+                        throw new CommonExeptions.TooMuchRequests();
+                    case 7:
+                        throw new CommonExeptions.NoPermissionsToPerformThisAction();
+                    case 8:
+                        throw new CommonExeptions.InvalidRequest();
+                    case 9:
+                        throw new CommonExeptions.TooManySimilarActions();
+                    case 10:
+                        throw new CommonExeptions.InternalServerError();
+                    case 11:
+                        throw new CommonExeptions.TestModeAppEnabled();
+                    case 14:
+                        throw new CommonExeptions.CaptchaNeeded();
+                    case 15:
+                        throw new CommonExeptions.AccessDenied();
+                    case 16:
+                        throw new CommonExeptions.OnlyHTTPSAllowed();
+                    case 17:
+                        throw new CommonExeptions.ValidationNeeded();
+                    case 18:
+                        throw new CommonExeptions.PageDeletedOrBanned();
+                    case 20:
+                        throw new CommonExeptions.ProhibitedForNonStandaloneApp();
+                    case 21:
+                        throw new CommonExeptions.OnlyForStandaloneApp();
+                    case 23:
+                        throw new CommonExeptions.MethodDisabled();
+                    case 24:
+                        throw new CommonExeptions.ConfirmationRequired();
+                    case 27:
+                        throw new CommonExeptions.CommunityAccessKeyInvalid();
+                    case 28:
+                        throw new CommonExeptions.ApplicationAccessKeyInvalid();
+                    case 29:
+                        throw new CommonExeptions.MethodInvocationLimitReached();
+                    case 100:
+                        throw new CommonExeptions.ParameterMissedOrIncorrect();
+                    case 101:
+                        throw new CommonExeptions.InvalidAppID();
+                    case 113:
+                        throw new CommonExeptions.InvalidUserId();
+                    case 150:
+                        throw new CommonExeptions.InvalidTimestamp();
+                    case 200:
+                        throw new CommonExeptions.AlbumAccessDenied();
+                    case 201:
+                        throw new CommonExeptions.AudioAccessDenied();
+                    case 203:
+                        throw new CommonExeptions.GroupAccessDenied();
+                    case 300:
+                        throw new CommonExeptions.AlbumIsFull();
+                    case 500:
+                        throw new CommonExeptions.VoiceTranslationsDisabled();
+                    case 600:
+                        throw new CommonExeptions.AdvertisingCabinetAccessDenied();
+                    case 603:
+                        throw new CommonExeptions.AdvertisingCabinetErrorOccurred();
+                }
+            }
+
+            return responseClass;
         }
 
 
         /// <summary>
-        /// Метод осуществляет запросы к серверу Вк. Debug only. Возвращает строку ответа для дальнейшего создания класса объекта.
+        /// Метод осуществляет запросы к серверу Вк. Возвращает строку ответа для дальнейшего создания класса объекта.
         /// </summary>
         /// <param name="method">Название метода, к которому следует обратится</param>
         /// <param name="parameters">Коллекция параметров для запроса</param>
         /// <returns></returns>
+        [Obsolete("DEBUG ONLY")]
         public static async Task<string> Request(string method, NameValueCollection parameters = null)
         {
             using (WebClient web = new WebClient())

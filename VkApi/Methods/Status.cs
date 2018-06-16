@@ -27,9 +27,6 @@ namespace VkApi.Methods
                 ["group_id"] = group_id.ToString()
             });
 
-            if (response.error != null)
-                throw new CommonExeption.CommonApiExeption { error_code = response.error.error_code, error_description = response.error.error_msg };
-
             return response;
         }
 
@@ -53,9 +50,6 @@ namespace VkApi.Methods
                 {
                     case 221:
                         throw new StatusExeptions.AudioToStatusDisabled { error_code = response.error.error_code, error_description = response.error.error_msg };
-
-                    default:
-                        throw new CommonExeption.CommonApiExeption { error_code = response.error.error_code, error_description = response.error.error_msg };
                 }
             }
 
