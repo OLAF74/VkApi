@@ -23,8 +23,8 @@ namespace VkApi.Methods
                 ["name_case"] = "nom"
             });
 
-            if (response.error.error_code != 0)//response.error.error_code == 15 | response.error.error_code == 100
-                throw new AccountExeptions.UserAlreadyRemovedFromBlacklist { error_code = response.error.error_code, error_description = response.error.error_msg };
+            //if (response.error.error_code != 0)//response.error.error_code == 15 | response.error.error_code == 100
+             //   throw new AccountExeptions.UserAlreadyRemovedFromBlacklist { error_code = response.error.error_code, error_description = response.error.error_msg };
 
             return response;
         }

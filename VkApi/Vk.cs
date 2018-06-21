@@ -19,70 +19,11 @@ namespace VkApi
     public class Vk
     {
         /// <summary>
-        /// Инициализирует библиотеку с помощью логина и пароля
+        /// Инициализирует библиотеку.
         /// </summary>
-        /// <param name="login">E-mail или номер телефона</param>
-        /// <param name="password">Пароль</param>
-        /// <param name="scope">Разрешения для приложения</param>
-        public Vk(string login, string password, Scope scope = Scope.all)
+        public Vk()
         {
-            var Task = Net.getToken(login, password, scope);
-            Task.Wait();
-            object response = Task.Result;
-
-            switch (response)
-            {
-                case dAuthError err:
-                    switch (err.error)
-                    {
-                        case "need_captcha":
-                            throw new CaptchaNeededExeption { captcha_img = err.captcha_img, captcha_sid = err.captcha_sid };
-                        case "invalid_client":
-                            throw new InvalidClientExeption { error = err.error, error_description = err.error_description };
-                        case "need_validation":
-                            throw new ValidationNeededExeption { validation_type = err.validation_type, phone_mask = err.phone_mask };
-                    }
-                    break;
-                case dAuthSuccess suc:
-                    Data.Set(suc.access_token, suc.user_id, suc.expires_in);
-                    Initialization();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Инициализирует библиотеку с помощью логина и пароля
-        /// Используется, если нужно подтвердить каптчу
-        /// </summary>
-        /// <param name="login">E-mail или номер телефона</param>
-        /// <param name="password">Пароль</param>
-        /// <param name="scope">Разрешения для приложения</param>
-        /// <param name="captcha_key">Текст, который ввел пользователь</param>
-        /// <param name="captcha_sid">Полученный идентификатор</param>
-        public Vk(string login, string password, string captcha_key, string captcha_sid, Scope scope = Scope.all)
-        {
-            var Task = Net.getToken(login, password, scope, captcha_key, captcha_sid);
-            Task.Wait();
-            object response = Task.Result;
-
-            switch (response)
-            {
-                case dAuthError err:
-                    switch (err.error)
-                    {
-                        case "need_captcha":
-                            throw new CaptchaNeededExeption { captcha_img = err.captcha_img, captcha_sid = err.captcha_sid };
-                        case "invalid_client":
-                            throw new InvalidClientExeption { error = err.error, error_description = err.error_description };
-                        case "need_validation":
-                            throw new ValidationNeededExeption { validation_type = err.validation_type, phone_mask = err.phone_mask };
-                    }
-                    break;
-                case dAuthSuccess suc:
-                    Data.Set(suc.access_token, suc.user_id, suc.expires_in);
-                    Initialization();
-                    break;
-            }
+            Initialization();
         }
 
         /// <summary>

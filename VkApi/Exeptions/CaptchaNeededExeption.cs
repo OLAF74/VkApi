@@ -10,16 +10,14 @@ namespace VkApi.Exeptions
     {
         public string captcha_sid { get; set; }
         public string captcha_img { get; set; }
+        public string error { get; set; }
 
-
-        public CaptchaNeededExeption() : base() { }
-        public CaptchaNeededExeption(string message) : base(message) { }
-        public CaptchaNeededExeption(string message, System.Exception inner) : base(message, inner) { }
-        public CaptchaNeededExeption(SerializationInfo info, StreamingContext context) : base(info, context) { }
-        public CaptchaNeededExeption(string message, string captcha_sid, string captcha_img) : base(message)
+        protected CaptchaNeededExeption(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        public CaptchaNeededExeption(string error, string captcha_sid, string captcha_img) : base(error)
         {
             this.captcha_sid = captcha_sid;
             this.captcha_img = captcha_img;
+            this.error = error;
         }
     }
 }

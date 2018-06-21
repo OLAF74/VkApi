@@ -18,8 +18,19 @@ namespace VkApi.Methods
 
             });
 
-            //if (response.error != null)
-            //    throw new CommonExeption.CommonApiExeption { error_code = response.error.error_code, error_description = response.error.error_msg };
+            if (response.error != null)
+            {
+                switch (response.error.error_code)
+                {
+                    case 25:
+                        throw new AudioExeptions.TokenConfirmationRequired(response.error.error_code, response.error.error_msg);
+
+                    case 19:
+                        throw new AudioExeptions.ContentBlocked(response.error.error_code, response.error.error_msg);
+                }
+            }
+
+
 
             return response;
         }

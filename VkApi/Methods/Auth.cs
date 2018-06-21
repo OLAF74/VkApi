@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using VkApi.Exeptions;
 using VkApi.Models;
 
 namespace VkApi.Methods
@@ -47,7 +48,7 @@ namespace VkApi.Methods
         /// Обход ограничений на закрытое API
         /// </summary>
         /// <returns></returns>
-        public async Task<string> refreshToken()
+        public async Task<string> RefreshToken()
         {
             using (WebClient web = new WebClient())
             {
@@ -71,9 +72,76 @@ namespace VkApi.Methods
 
                 web.Headers.Add("User-Agent", Net.USER_AGENT);
 
+                Log.Append("REQUEST:::refreshToken");
+
                 var response = JsonConvert.DeserializeObject<dAuth.dRefreshToken>(Encoding.Default.GetString(await web.UploadValuesTaskAsync("https://api.vk.com/method/auth.refreshToken", values)));
+
+                if(response.response.token != null)
+                    Log.Append("REQUEST:::OK");
+                else
+                    Log.Append("REQUEST:::ERROR");
+
                 return response.response.token;
             }
+        }
+
+        public async Task<bool> Authorize(string login, string password, Scope scope = Scope.all)
+        {
+            var response = await Net.getToken(login, password, scope);
+
+
+            if (response.error != null)
+            {
+                Log.Append("REQUEST:::ERROR");
+
+                switch (response.error)
+                {
+                    case "need_captcha":
+                        throw new CaptchaNeededExeption(response.error_description, response.captcha_img, response.captcha_sid);
+                    case "invalid_client":
+                        throw new InvalidClientExeption { error = response.error, error_description = response.error_description };
+                    case "need_validation":
+                        throw new ValidationNeededExeption { validation_type = response.validation_type, phone_mask = response.phone_mask };
+                    default:
+                        throw new CommonExeptions.UnknownApiError(-1, string.Format("error_code: {0}.\ndescription: {1}", response.error, response.error_description));
+                }
+            }
+
+            Log.Append("REQUEST:::OK");
+
+            Data.Set(response.access_token, response.user_id, response.expires_in);
+            return true;
+        }
+
+        public async Task<bool> CheckPhone(string phone, bool auth_by_phone)
+        {
+            var response = await Net.Request<dAuth.CheckPhone>("auth.checkPhone", new NameValueCollection
+            {
+                ["phone"] = phone,
+                ["client_id"] = Net.CLIENT_ID,
+                ["client_secret"] = Net.CLIENT_SECRET,
+                ["auth_by_phone"] = auth_by_phone.ToString()
+            });
+
+
+            if (response.error != null)
+            {
+                switch (response.error.error_code)
+                {
+                    case 1000:
+                        throw new AuthExeptions.InvalidPhoneNumber(response.error.error_code, response.error.error_msg);
+
+                    case 1004:
+                        throw new AuthExeptions.PhoneAlreadyRegistered(response.error.error_code, response.error.error_msg);
+
+                    case 1112:
+                        throw new AuthExeptions.ProcessingTryLater(response.error.error_code, response.error.error_msg);
+
+                }
+            }
+
+            return Convert.ToBoolean(response.response);
+
         }
     }
 }

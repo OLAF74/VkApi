@@ -26,10 +26,10 @@ namespace VkApi.Methods
                 switch (response.error.error_code)
                 {
                     case 15:
-                        throw new AccountExeptions.UserAlreadyBlacklisted { error_code = response.error.error_code, error_description = response.error.error_msg };
+                        throw new AccountExeptions.UserAlreadyBlacklisted( response.error.error_code,  response.error.error_msg );
 
                     default:
-                        throw new AccountExeptions.UnknownAccountMethodError { error_code = response.error.error_code, error_description = response.error.error_msg };
+                        throw new AccountExeptions.UnknownAccountMethodError ( response.error.error_code, response.error.error_msg );
 
                 }
             return Convert.ToBoolean(response.response);
@@ -51,10 +51,10 @@ namespace VkApi.Methods
                 switch (response.error.error_code)
                 {
                     case 15:
-                        throw new AccountExeptions.UserAlreadyRemovedFromBlacklist { error_code = response.error.error_code, error_description = response.error.error_msg };
+                        throw new AccountExeptions.UserAlreadyRemovedFromBlacklist(response.error.error_code, response.error.error_msg);
 
                     default:
-                        throw new AccountExeptions.UnknownAccountMethodError { error_code = response.error.error_code, error_description = response.error.error_msg };
+                        throw new AccountExeptions.UnknownAccountMethodError(response.error.error_code, response.error.error_msg);
 
                 }
 

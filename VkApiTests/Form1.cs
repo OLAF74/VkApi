@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using VkApi;
 using VkApi.Methods;
 using VkApi.Models;
+using VkApi.Exeptions;
 
 namespace VkApiTests
 {
@@ -18,31 +19,41 @@ namespace VkApiTests
         public Form1()
         {
             InitializeComponent();
+            Log.Create();
         }
 
 
         private const string __login = "";
         private const string __password = "";
 
-        Vk VK = new Vk(__login, __password, Scope.all);
+        Vk VK = new Vk();
 
         private async void button1_Click(object sender, EventArgs e)
         {
-             VK = new Vk(await VK.Auth.refreshToken());
-
             try
             {
                 var response = await VK.Audio.Get();
-                if (response.error is null)
-                    Console.WriteLine("Audio count: " + response.response.count);
-                else
-                    Console.WriteLine(response.error.error_msg);
+                Console.WriteLine("Audio count: " + response.response.count);
+
             }
-            catch { }
-            
+            catch (AudioExeptions.TokenConfirmationRequired)
+            {
+                Console.WriteLine("refresh token needed");
+                Console.WriteLine("refreshing...");
+                VK = new Vk(await VK.Auth.RefreshToken());
+                Console.WriteLine("done");
+            }
+            catch (CommonExeptions.AuthError)
+            {
+                Console.WriteLine("access_token needed");
+                Console.WriteLine("authing...");
 
+                if (await VK.Auth.Authorize(__login, __password))
+                    Console.WriteLine("done");
+                else
+                    throw new Exception();
+            }
 
-            
         }
 
         private async void button2_Click(object sender, EventArgs e)
